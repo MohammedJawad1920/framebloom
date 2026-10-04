@@ -17,6 +17,14 @@ export default async function LoginPage() {
           Continue with Google
         </button>
       </form>
+      {process.env.NODE_ENV !== 'production' && (
+        <form action="/auth/email" method="post" className="flex flex-col gap-2 w-full max-w-xs mt-4 border-t pt-4">
+          <p className="text-xs text-gray-400 text-center">Dev login (not in production)</p>
+          <input name="email" type="email" placeholder="Email" className="rounded border px-3 py-2" />
+          <input name="password" type="password" placeholder="Password" className="rounded border px-3 py-2" />
+          <button type="submit" className="rounded bg-gray-800 px-4 py-2 text-white">Sign in (dev)</button>
+        </form>
+      )}
     </main>
   )
 }
