@@ -38,14 +38,14 @@ export default function CampaignList({ campaigns }: { campaigns: Campaign[] }) {
   return (
     <ul className="space-y-3">
       {rows.map(c => (
-        <li key={c.id} className="flex items-center gap-4 rounded-lg border p-4">
+        <li key={c.id} className="flex items-center gap-4 rounded-lg border p-4 hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors">
           <Link href={`/campaigns/${c.id}`} className="flex-1 font-medium hover:underline">
             {c.name}
           </Link>
           <span className="text-sm text-gray-500">{c.frames[0]?.count ?? 0} frames</span>
           <button
             onClick={() => toggleActive(c.id, c.is_active)}
-            className={`rounded px-3 py-1 text-sm ${c.is_active ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-600'}`}
+            className={`rounded px-3 py-1 text-sm ${c.is_active ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-600'} hover:opacity-80 transition-opacity`}
           >
             {c.is_active ? 'Active' : 'Inactive'}
           </button>

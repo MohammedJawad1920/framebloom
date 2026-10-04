@@ -30,6 +30,11 @@ export default function FrameList({
     router.refresh()
   }
 
+  const updateColor = async (id: string, color: string) => {
+    setFrames(f => f.map(fr => fr.id === id ? { ...fr, color_hex: color } : fr))
+    await supabase.from('frames').update({ color_hex: color }).eq('id', id)
+  }
+
   const getPublicUrl = (path: string) =>
     supabase.storage.from('frames').getPublicUrl(path).data.publicUrl
 
@@ -37,9 +42,11 @@ export default function FrameList({
     <ul className="space-y-2">
       {frames.map(frame => (
         <li key={frame.id} className="flex items-center gap-3 rounded border p-3">
-          <div
-            className="h-6 w-6 rounded-full border"
-            style={{ backgroundColor: frame.color_hex }}
+          <input
+            type="color"
+            value={frame.color_hex}
+            onChange={(e) => updateColor(frame.id, e.target.value)}
+            className="h-8 w-8 cursor-pointer rounded border p-0"
           />
           <Image
             src={getPublicUrl(frame.storage_path)}
