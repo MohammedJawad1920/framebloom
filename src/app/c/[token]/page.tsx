@@ -1,4 +1,4 @@
-import { notFound } from 'next/navigation'
+
 import CampaignEditor from '@/components/public/CampaignEditor'
 
 type Frame = {

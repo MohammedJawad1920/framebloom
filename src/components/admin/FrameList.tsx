@@ -13,7 +13,6 @@ type Frame = {
 }
 
 export default function FrameList({
-  campaignId,
   initialFrames,
 }: {
   campaignId: string

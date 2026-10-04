@@ -1,5 +1,5 @@
 'use client'
-import { useState, useRef, useCallback } from 'react'
+import { useState, useRef, useCallback, useEffect } from 'react'
 import CanvasEditor from './CanvasEditor'
 import SwatchRow from './SwatchRow'
 import { loadPhoto } from '@/lib/image/photoLoader'
@@ -14,9 +14,17 @@ export default function CampaignEditor({ campaign }: { campaign: { name: string;
   const [selectedFrame, setSelectedFrame] = useState(campaign.frames[0])
   const [transform, setTransform] = useState<Transform>({ x: 0, y: 0, scale: 1 })
   const [downloading, setDownloading] = useState(false)
+  const [sharing, setSharing] = useState(false)
   const [dlError, setDlError] = useState<string | null>(null)
+  const [canShare, setCanShare] = useState(false)
   const frameImgRef = useRef<HTMLImageElement | null>(null)
   const photoInputRef = useRef<HTMLInputElement>(null)
+
+  useEffect(() => {
+    if (typeof navigator !== 'undefined' && !!navigator.share) {
+      setCanShare(true)
+    }
+  }, [])
 
   const pickPhoto = useCallback(async (files: FileList | null) => {
     if (!files?.[0]) return
@@ -26,36 +34,53 @@ export default function CampaignEditor({ campaign }: { campaign: { name: string;
     setTransform({ x: 0, y: 0, scale: 1 }) // reset position
   }, [])
 
-  const download = async () => {
-    if (!photo || !photoSize || !frameImgRef.current) return
+  const getExportedFile = async () => {
+    if (!photo || !photoSize || !frameImgRef.current) return null
+    const blob = await exportComposition(
+      photo,
+      photoSize,
+      frameImgRef.current,
+      { w: selectedFrame.width, h: selectedFrame.height },
+      transform
+    )
+    if (!blob) throw new Error('Canvas export failed.')
+    const filename = `${campaign.name.toLowerCase().replace(/\s+/g, '-')}-${selectedFrame.label.toLowerCase()}.png`
+    return new File([blob], filename, { type: 'image/png' })
+  }
+
+  const handleDownload = async () => {
     setDownloading(true)
     setDlError(null)
     try {
-      const blob = await exportComposition(
-        photo,
-        photoSize,
-        frameImgRef.current,
-        { w: selectedFrame.width, h: selectedFrame.height },
-        transform
-      )
-      if (!blob) throw new Error('Canvas export failed.')
-
-      const filename = `${campaign.name.toLowerCase().replace(/\s+/g, '-')}-${selectedFrame.label.toLowerCase()}.png`
-      const file = new File([blob], filename, { type: 'image/png' })
-
-      if (navigator.share && navigator.canShare?.({ files: [file] })) {
-        await navigator.share({ files: [file] })
-      } else {
-        const a = document.createElement('a')
-        a.href = URL.createObjectURL(blob)
-        a.download = filename
-        a.click()
-      }
+      const file = await getExportedFile()
+      if (!file) return
+      const a = document.createElement('a')
+      a.href = URL.createObjectURL(file)
+      a.download = file.name
+      a.click()
     } catch (e) {
       console.error('Export error:', e)
       setDlError('Download failed. If the problem persists, try a different browser.')
     }
     setDownloading(false)
+  }
+
+  const handleShare = async () => {
+    setSharing(true)
+    setDlError(null)
+    try {
+      const file = await getExportedFile()
+      if (!file) return
+      if (navigator.share && navigator.canShare?.({ files: [file] })) {
+        await navigator.share({ files: [file] })
+      } else {
+        throw new Error('Sharing not supported for this file')
+      }
+    } catch (e) {
+      console.error('Share error:', e)
+      setDlError('Sharing failed or is not supported on this device.')
+    }
+    setSharing(false)
   }
 
   const aspectRatio = selectedFrame.width / selectedFrame.height
@@ -91,13 +116,25 @@ export default function CampaignEditor({ campaign }: { campaign: { name: string;
         </button>
       )}
 
-      <button
-        onClick={download}
-        disabled={!photo || downloading}
-        className="rounded-lg bg-green-600 px-6 py-3 text-white font-semibold disabled:opacity-40"
-      >
-        {downloading ? 'Preparing…' : 'Download'}
-      </button>
+      <div className="flex gap-3">
+        <button
+          onClick={handleDownload}
+          disabled={!photo || downloading || sharing}
+          className="rounded-lg bg-gray-100 px-6 py-3 text-gray-900 font-semibold hover:bg-gray-200 disabled:opacity-40"
+        >
+          {downloading ? 'Preparing…' : 'Save Image'}
+        </button>
+
+        {canShare && (
+          <button
+            onClick={handleShare}
+            disabled={!photo || downloading || sharing}
+            className="rounded-lg bg-green-600 px-6 py-3 text-white font-semibold hover:bg-green-700 disabled:opacity-40"
+          >
+            {sharing ? 'Preparing…' : 'Share'}
+          </button>
+        )}
+      </div>
 
       {dlError && <p className="text-sm text-red-600">{dlError}</p>}
 
