@@ -19,5 +19,5 @@ export function pickDominantColor(data: Uint8ClampedArray): string {
 
   if (counts.size === 0) return '#888888'
 
-  return [...counts.entries()].reduce((a, b) => (b[1] > a[1] ? b : a))[0]
+  return Array.from(counts.entries()).reduce((a, b) => (b[1] > a[1] ? b : a))[0]
 }
