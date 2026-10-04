@@ -24,6 +24,13 @@ export default function CampaignList({ campaigns }: { campaigns: Campaign[] }) {
     navigator.clipboard.writeText(`${window.location.origin}/c/${token}`)
   }
 
+  const regenerateLink = async (id: string) => {
+    if (!confirm('This will invalidate the current link. Continue?')) return
+    const res = await fetch(`/api/campaigns/${id}/regenerate-token`, { method: 'POST' })
+    const { token } = await res.json()
+    setRows(r => r.map(c => c.id === id ? { ...c, public_token: token } : c))
+  }
+
   if (rows.length === 0) {
     return <p className="text-gray-500">No campaigns yet. Create your first one!</p>
   }
@@ -47,6 +54,12 @@ export default function CampaignList({ campaigns }: { campaigns: Campaign[] }) {
             className="rounded px-3 py-1 text-sm bg-blue-50 text-blue-700 hover:bg-blue-100"
           >
             Copy link
+          </button>
+          <button
+            onClick={() => regenerateLink(c.id)}
+            className="rounded px-3 py-1 text-sm text-gray-500 hover:text-red-600"
+          >
+            Regenerate link
           </button>
         </li>
       ))}
