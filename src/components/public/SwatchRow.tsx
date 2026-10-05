@@ -10,14 +10,14 @@ export default function SwatchRow({
   onSelect: (id: string) => void
 }) {
   return (
-    <div className="flex gap-3 flex-wrap justify-center">
+    <div className="flex gap-4 flex-wrap justify-center p-2">
       {frames.map(f => (
         <button
           key={f.id}
           onClick={() => onSelect(f.id)}
           title={f.label}
-          className={`h-8 w-8 rounded-full border-2 transition-transform ${
-            f.id === selected ? 'border-gray-800 scale-110' : 'border-transparent hover:scale-105'
+          className={`h-11 w-11 rounded-full transition-all ${
+            f.id === selected ? 'ring-2 ring-offset-2 ring-indigo-500 scale-110 shadow-sm' : 'hover:scale-105 border border-gray-200 shadow-sm'
           }`}
           style={{ backgroundColor: f.color_hex }}
         />

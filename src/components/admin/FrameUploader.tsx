@@ -84,8 +84,8 @@ export default function FrameUploader({
   const atLimit = frameCount >= LIMITS.FRAMES_PER_CAMPAIGN
 
   return (
-    <div>
-      <h2 className="text-lg font-semibold mb-2">Frames</h2>
+    <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
+      <h2 className="text-lg font-semibold mb-4 text-gray-900">Upload Frames</h2>
       {atLimit ? (
         <p className="text-sm text-gray-500">Frame limit reached ({LIMITS.FRAMES_PER_CAMPAIGN}).</p>
       ) : (
@@ -93,9 +93,10 @@ export default function FrameUploader({
           onDragOver={e => e.preventDefault()}
           onDrop={e => { e.preventDefault(); handleFiles(e.dataTransfer.files) }}
           onClick={() => inputRef.current?.click()}
-          className="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center cursor-pointer hover:border-blue-400"
+          className="border-2 border-dashed border-gray-200 rounded-xl p-8 text-center cursor-pointer hover:border-indigo-400 hover:bg-indigo-50/50 transition-colors flex flex-col items-center gap-3"
         >
-          {uploading ? 'Uploading…' : 'Drag PNG frames here or click to select'}
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-gray-400 w-8 h-8"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+          <span className="text-gray-600 font-medium">{uploading ? 'Uploading…' : 'Drag PNG frames here or click to select'}</span>
           <input
             ref={inputRef}
             type="file"
@@ -106,7 +107,7 @@ export default function FrameUploader({
           />
         </div>
       )}
-      {error && <p className="mt-2 text-sm text-red-600">{error}</p>}
+      {error && <p className="mt-4 text-sm text-red-600 font-medium bg-red-50 p-3 rounded-lg border border-red-100">{error}</p>}
     </div>
   )
 }

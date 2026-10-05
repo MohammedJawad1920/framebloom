@@ -36,31 +36,38 @@ export default function CampaignList({ campaigns }: { campaigns: Campaign[] }) {
   }
 
   return (
-    <ul className="space-y-3">
+    <ul className="space-y-4">
       {rows.map(c => (
-        <li key={c.id} className="flex items-center gap-4 rounded-lg border p-4 hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors">
-          <Link href={`/campaigns/${c.id}`} className="flex-1 font-medium hover:underline">
-            {c.name}
-          </Link>
-          <span className="text-sm text-gray-500">{c.frames[0]?.count ?? 0} frames</span>
-          <button
-            onClick={() => toggleActive(c.id, c.is_active)}
-            className={`rounded px-3 py-1 text-sm ${c.is_active ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-600'} hover:opacity-80 transition-opacity`}
-          >
-            {c.is_active ? 'Active' : 'Inactive'}
-          </button>
-          <button
-            onClick={() => copyLink(c.public_token)}
-            className="rounded px-3 py-1 text-sm bg-blue-50 text-blue-700 hover:bg-blue-100"
-          >
-            Copy link
-          </button>
-          <button
-            onClick={() => regenerateLink(c.id)}
-            className="rounded px-3 py-1 text-sm text-gray-500 hover:text-red-600"
-          >
-            Regenerate link
-          </button>
+        <li key={c.id} className="flex flex-col sm:flex-row sm:items-center gap-4 bg-white rounded-2xl shadow-sm border border-gray-100 p-6 transition-colors hover:border-gray-200">
+          <div className="flex-1 flex flex-col gap-1">
+            <Link href={`/campaigns/${c.id}`} className="font-semibold text-lg hover:text-indigo-600 transition-colors">
+              {c.name}
+            </Link>
+            <div className="flex items-center gap-3">
+              <span className="text-sm text-gray-500">{c.frames[0]?.count ?? 0} frames</span>
+              <button
+                onClick={() => toggleActive(c.id, c.is_active)}
+                className={`rounded-full px-3 py-1 text-xs font-medium ${c.is_active ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-600'} hover:opacity-80 transition-opacity`}
+              >
+                {c.is_active ? 'Active' : 'Inactive'}
+              </button>
+            </div>
+          </div>
+          
+          <div className="flex items-center gap-2 mt-4 sm:mt-0">
+            <button
+              onClick={() => copyLink(c.public_token)}
+              className="bg-white hover:bg-gray-50 text-gray-700 font-medium px-5 py-3 rounded-xl border border-gray-200 shadow-sm transition-colors min-h-[44px] flex-1 sm:flex-none text-center"
+            >
+              Copy link
+            </button>
+            <button
+              onClick={() => regenerateLink(c.id)}
+              className="bg-white hover:bg-gray-50 text-red-600 font-medium px-5 py-3 rounded-xl border border-gray-200 shadow-sm transition-colors min-h-[44px] flex-1 sm:flex-none text-center"
+            >
+              Regenerate link
+            </button>
+          </div>
         </li>
       ))}
     </ul>

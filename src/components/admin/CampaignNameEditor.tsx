@@ -20,9 +20,9 @@ export default function CampaignNameEditor({ id, initialName }: { id: string; in
         value={name}
         onChange={e => setName(e.target.value)}
         onBlur={save}
-        className="flex-1 rounded border px-3 py-2 text-xl font-bold focus:outline-none focus:ring-2 focus:ring-blue-400 dark:bg-transparent dark:text-white"
+        className="w-full rounded-xl border border-gray-200 bg-white px-4 py-3 text-gray-900 focus:ring-2 focus:ring-indigo-500 text-2xl font-bold transition-shadow"
       />
-      {saving && <span className="self-center text-sm text-gray-400">Saving…</span>}
+      {saving && <span className="self-center text-sm text-gray-500 font-medium">Saving…</span>}
     </div>
   )
 }

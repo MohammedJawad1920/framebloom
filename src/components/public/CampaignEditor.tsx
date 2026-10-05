@@ -110,17 +110,17 @@ export default function CampaignEditor({ campaign }: { campaign: { name: string;
       {photo && (
         <button
           onClick={() => photoInputRef.current?.click()}
-          className="text-sm text-blue-600 hover:underline"
+          className="bg-white hover:bg-gray-50 text-gray-700 font-medium px-5 py-3 rounded-xl border border-gray-200 shadow-sm transition-colors min-h-[44px]"
         >
           Change photo
         </button>
       )}
 
-      <div className="flex gap-3">
+      <div className="flex flex-col sm:flex-row gap-3 w-full max-w-sm">
         <button
           onClick={handleDownload}
           disabled={!photo || downloading || sharing}
-          className="rounded-lg bg-gray-100 px-6 py-3 text-gray-900 font-semibold hover:bg-gray-200 disabled:opacity-40"
+          className="bg-indigo-600 hover:bg-indigo-700 text-white font-semibold px-5 py-3 rounded-xl transition-colors min-h-[44px] disabled:opacity-50 flex-1"
         >
           {downloading ? 'Preparing…' : 'Save Image'}
         </button>
@@ -129,22 +129,21 @@ export default function CampaignEditor({ campaign }: { campaign: { name: string;
           <button
             onClick={handleShare}
             disabled={!photo || downloading || sharing}
-            className="rounded-lg bg-green-600 px-6 py-3 text-white font-semibold hover:bg-green-700 disabled:opacity-40"
+            className="bg-indigo-600 hover:bg-indigo-700 text-white font-semibold px-5 py-3 rounded-xl transition-colors min-h-[44px] disabled:opacity-50 flex-1"
           >
             {sharing ? 'Preparing…' : 'Share'}
           </button>
         )}
       </div>
 
-      {dlError && <p className="text-sm text-red-600">{dlError}</p>}
+      {dlError && <p className="text-sm text-red-600 font-medium">{dlError}</p>}
 
-      <p className="text-xs text-gray-400">Your photo stays on your device.</p>
+      <p className="text-xs text-gray-500 mt-4">Your photo stays on your device.</p>
 
       <input
         ref={photoInputRef}
         type="file"
         accept="image/jpeg,image/png,image/webp,image/heic"
-        capture="environment"
         className="hidden"
         onChange={e => pickPhoto(e.target.files)}
       />

@@ -41,7 +41,7 @@ export default function NewCampaignButton({
     <button
       onClick={create}
       disabled={busy}
-      className="rounded-lg bg-blue-600 px-4 py-2 text-white font-medium hover:bg-blue-700 disabled:opacity-50"
+      className="bg-indigo-600 hover:bg-indigo-700 text-white font-semibold px-5 py-3 rounded-xl transition-colors min-h-[44px] disabled:opacity-50"
     >
       {busy ? 'Creating…' : 'New campaign'}
     </button>

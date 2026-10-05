@@ -166,7 +166,7 @@ export default function CanvasEditor({
       ref={canvasRef}
       width={frame.width}
       height={frame.height}
-      className="w-full h-full cursor-grab active:cursor-grabbing"
+      className="w-full h-full cursor-grab active:cursor-grabbing shadow-sm"
       style={{ touchAction: 'none' }}
       onClick={!photo ? onPhotoRequest : undefined}
       onTouchStart={onTouchStart}
