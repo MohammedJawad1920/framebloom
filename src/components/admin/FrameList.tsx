@@ -39,31 +39,45 @@ export default function FrameList({
 
   return (
     <ul className="space-y-2">
-      {frames.map(frame => (
-        <li key={frame.id} className="flex items-center gap-3 rounded border p-3">
-          <input
-            type="color"
-            value={frame.color_hex}
-            onChange={(e) => updateColor(frame.id, e.target.value)}
-            className="h-8 w-8 cursor-pointer rounded border p-0"
-          />
-          <Image
-            src={getPublicUrl(frame.storage_path)}
-            alt={frame.label}
-            width={48}
-            height={48}
-            className="rounded object-contain"
-            crossOrigin="anonymous"
-          />
-          <span className="flex-1 text-sm font-medium">{frame.label}</span>
-          <button
-            onClick={() => deleteFrame(frame.id)}
-            className="text-sm text-red-600 hover:underline"
-          >
-            Delete
-          </button>
-        </li>
-      ))}
+      {frames.map(frame => {
+        const displayName = frame.storage_path.split('/').pop()?.replace(/^[-—\s]+/, '')?.replace(/\.[^.]+$/, '') ?? 'Frame'
+        return (
+          <li key={frame.id} className="flex items-center gap-3 rounded border p-3">
+            <label className="cursor-pointer flex-shrink-0">
+              <div
+                className="w-8 h-8 rounded-full border-2 border-white/20 shadow-md"
+                style={{ backgroundColor: frame.color_hex }}
+                title="Change color"
+              />
+              <input
+                type="color"
+                className="opacity-0 absolute w-0 h-0"
+                value={frame.color_hex}
+                onChange={(e) => updateColor(frame.id, e.target.value)}
+              />
+            </label>
+            <Image
+              src={getPublicUrl(frame.storage_path)}
+              alt={frame.label}
+              width={48}
+              height={48}
+              className="rounded object-contain"
+              crossOrigin="anonymous"
+            />
+            <div className="flex-1 min-w-0">
+              <span className="truncate max-w-[150px] sm:max-w-xs text-sm text-gray-300 block" title={frame.storage_path}>
+                {displayName}
+              </span>
+            </div>
+            <button
+              onClick={() => deleteFrame(frame.id)}
+              className="text-sm text-red-600 hover:underline flex-shrink-0"
+            >
+              Delete
+            </button>
+          </li>
+        )
+      })}
     </ul>
   )
 }
