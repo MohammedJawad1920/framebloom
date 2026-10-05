@@ -4,6 +4,7 @@ import Link from 'next/link'
 import FrameUploader from '@/components/admin/FrameUploader'
 import FrameList from '@/components/admin/FrameList'
 import CampaignNameEditor from '@/components/admin/CampaignNameEditor'
+import DeleteCampaignButton from '@/components/admin/DeleteCampaignButton'
 
 export default async function CampaignPage({ params }: { params: { id: string } }) {
   const supabase = createClient()
@@ -17,7 +18,10 @@ export default async function CampaignPage({ params }: { params: { id: string } 
 
   return (
     <main className="mx-auto max-w-2xl px-4 py-10 space-y-8">
-      <Link href="/dashboard" className="inline-flex items-center gap-1 text-sm text-gray-500 hover:text-gray-900 transition-colors mb-6">← Back to dashboard</Link>
+      <div className="flex items-center justify-between mb-6">
+        <Link href="/dashboard" prefetch={true} className="inline-flex items-center gap-1 text-sm text-gray-500 hover:text-gray-900 transition-colors">← Back to dashboard</Link>
+        <DeleteCampaignButton id={campaign.id} />
+      </div>
       <CampaignNameEditor id={campaign.id} initialName={campaign.name} />
       <FrameUploader
         campaignId={campaign.id}
