@@ -8,7 +8,7 @@ export default async function LoginPage() {
 
   return (
     <main className="flex min-h-screen flex-col items-center justify-center gap-6 p-8">
-      <h1 className="text-2xl font-bold">Photo Frame SaaS</h1>
+      <h1 className="text-3xl font-bold tracking-tight">Frame Bloom</h1>
       <form action="/auth/google" method="post">
         <button
           type="submit"

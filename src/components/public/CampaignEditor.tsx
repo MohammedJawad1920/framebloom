@@ -12,7 +12,7 @@ export default function CampaignEditor({ campaign }: { campaign: { name: string;
   const [photo, setPhoto] = useState<ImageBitmap | null>(null)
   const [photoSize, setPhotoSize] = useState<{ w: number; h: number } | null>(null)
   const [selectedFrame, setSelectedFrame] = useState(campaign.frames[0])
-  const [transform, setTransform] = useState<Transform>({ x: 0, y: 0, scale: 1 })
+  const transformRef = useRef<Transform>({ x: 0, y: 0, scale: 1 })
   const [downloading, setDownloading] = useState(false)
   const [sharing, setSharing] = useState(false)
   const [dlError, setDlError] = useState<string | null>(null)
@@ -31,7 +31,7 @@ export default function CampaignEditor({ campaign }: { campaign: { name: string;
     const bitmap = await loadPhoto(files[0])
     setPhoto(bitmap)
     setPhotoSize({ w: bitmap.width, h: bitmap.height })
-    setTransform({ x: 0, y: 0, scale: 1 }) // reset position
+    transformRef.current = { x: 0, y: 0, scale: 1 } // reset position
   }, [])
 
   const getExportedFile = async () => {
@@ -41,7 +41,7 @@ export default function CampaignEditor({ campaign }: { campaign: { name: string;
       photoSize,
       frameImgRef.current,
       { w: selectedFrame.width, h: selectedFrame.height },
-      transform
+      transformRef.current
     )
     if (!blob) throw new Error('Canvas export failed.')
     const filename = `${campaign.name.toLowerCase().replace(/\s+/g, '-')}-${selectedFrame.label.toLowerCase()}.png`
@@ -94,8 +94,7 @@ export default function CampaignEditor({ campaign }: { campaign: { name: string;
           frame={selectedFrame}
           photo={photo}
           photoSize={photoSize}
-          transform={transform}
-          onTransformChange={setTransform}
+          transformRef={transformRef}
           onPhotoRequest={() => photoInputRef.current?.click()}
           frameImgRef={frameImgRef}
         />
@@ -143,7 +142,7 @@ export default function CampaignEditor({ campaign }: { campaign: { name: string;
       <input
         ref={photoInputRef}
         type="file"
-        accept="image/*"
+        accept=".heic,.heif,.jpg,.jpeg,.png,image/*"
         className="hidden"
         onChange={e => pickPhoto(e.target.files)}
       />

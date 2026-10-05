@@ -11,7 +11,7 @@ export default async function AdminLayout({ children }: { children: ReactNode })
     <div className="min-h-screen bg-gray-50 flex flex-col">
       <header className="bg-white border-b border-gray-200">
         <div className="max-w-5xl mx-auto px-4 h-16 flex items-center justify-between">
-          <h1 className="font-semibold text-lg text-gray-900">Photo Frame SaaS</h1>
+          <h1 className="font-semibold text-lg text-gray-900 tracking-tight">Frame Bloom</h1>
           <LogoutButton />
         </div>
       </header>

@@ -1,4 +1,4 @@
-
+import { createClient } from '@/lib/supabase/server'
 import CampaignEditor from '@/components/public/CampaignEditor'
 
 type Frame = {
@@ -16,12 +16,21 @@ type Campaign = {
 }
 
 async function getCampaign(token: string): Promise<Campaign | null> {
-  const res = await fetch(
-    `${process.env.NEXT_PUBLIC_APP_URL}/api/campaign/${token}`,
-    { cache: 'no-store' }
-  )
-  if (!res.ok) return null
-  return res.json()
+  const supabase = createClient()
+  const { data, error } = await supabase.rpc('get_campaign_by_token', { p_token: token })
+
+  if (error || !data) return null
+
+  const { data: { publicUrl: baseUrl } } = supabase.storage.from('frames').getPublicUrl('')
+  const campaign = {
+    ...data,
+    frames: (data.frames ?? []).map((f: { storage_path: string; [key: string]: unknown }) => ({
+      ...f,
+      url: `${baseUrl}${f.storage_path}`,
+    })),
+  }
+
+  return campaign as Campaign
 }
 
 export default async function CampaignPage({ params }: { params: { token: string } }) {
