@@ -57,13 +57,13 @@ export default function CampaignList({ campaigns }: { campaigns: Campaign[] }) {
           <div className="flex items-center gap-2 mt-4 sm:mt-0">
             <button
               onClick={() => copyLink(c.public_token)}
-              className="bg-white hover:bg-gray-50 text-gray-700 font-medium px-5 py-3 rounded-xl border border-gray-200 shadow-sm transition-colors min-h-[44px] flex-1 sm:flex-none text-center"
+              className="bg-white hover:bg-gray-50 text-gray-700 font-medium text-sm sm:text-base whitespace-nowrap px-3 sm:px-5 py-2 sm:py-3 rounded-xl border border-gray-200 shadow-sm transition-colors min-h-[44px] flex-1 sm:flex-none text-center"
             >
               Copy link
             </button>
             <button
               onClick={() => regenerateLink(c.id)}
-              className="bg-white hover:bg-gray-50 text-red-600 font-medium px-5 py-3 rounded-xl border border-gray-200 shadow-sm transition-colors min-h-[44px] flex-1 sm:flex-none text-center"
+              className="bg-white hover:bg-gray-50 text-red-600 font-medium text-sm sm:text-base whitespace-nowrap px-3 sm:px-5 py-2 sm:py-3 rounded-xl border border-gray-200 shadow-sm transition-colors min-h-[44px] flex-1 sm:flex-none text-center"
             >
               Regenerate link
             </button>

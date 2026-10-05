@@ -1,5 +1,5 @@
 'use client'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import Image from 'next/image'
 import { useRouter } from 'next/navigation'
 import { createClient } from '@/lib/supabase/client'
@@ -21,6 +21,10 @@ export default function FrameList({
   const [frames, setFrames] = useState([...initialFrames].sort((a, b) => a.sort_order - b.sort_order))
   const router = useRouter()
   const supabase = createClient()
+
+  useEffect(() => {
+    setFrames([...initialFrames].sort((a, b) => a.sort_order - b.sort_order))
+  }, [initialFrames])
 
   const deleteFrame = async (id: string) => {
     if (!confirm('Delete this frame?')) return

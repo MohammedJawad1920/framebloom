@@ -143,7 +143,7 @@ export default function CampaignEditor({ campaign }: { campaign: { name: string;
       <input
         ref={photoInputRef}
         type="file"
-        accept="image/jpeg,image/png,image/webp,image/heic"
+        accept="image/*"
         className="hidden"
         onChange={e => pickPhoto(e.target.files)}
       />
